@@ -1,8 +1,8 @@
 function evalLexico(code) {
+    // Clasificamos los componentes gramaticales en "Tokens"
   return code.split(/\s+/)
           .filter(function (t) { return t.length > 0 })
           .map( token =>{
-
             if(PR.indexOf(token)>=0){
               return { type: 'PR', value: token }
             }
@@ -11,6 +11,8 @@ function evalLexico(code) {
                 return { type: 'TP', value: token }
             }
             else if(OR.indexOf(token) >= 0){
+                if(token == '&gt'){return { type: 'OR',value: '>' };}
+                else if(token == '&lt'){return { type: 'OR',value: '<' };}
                 return { type: 'OR',value: token };
             } else if (OA.indexOf(token) >= 0){
                 return { type: 'OA', value: token };
@@ -23,14 +25,35 @@ function evalLexico(code) {
             } else if(token == 'false'){
                 return {type: 'boolean', value: false};
             } else if(isNaN(token)){
-                if(TP.indexOf(controlador) >= 0){
-                  controlador = '';
+                
+                if(TP.indexOf(controlador) >= 0 || variables[token]){
+                    controlador = '';
+
+                    if(token.match(regexVariables) === null){
+                        consola.innerHTML = `> Error, la variable ${token} esta mal definida. Las variables deben empezar por una letra.`;
+                        console.warn('Error, las variables deben empezar por una letra.');
+                    }
+
+                    // Instanciamos las variables del Programa.
+                    if(!variables[token]){
+                        variables[token] = {
+                            variable: token,
+                            codigo: 1
+                        }
+                    }   
+                    //   variables[].
                   return {type: 'VR', value: token}
                 }
                 return {type: 'texto', value: token};
             } else {
+                if( TP.indexOf(controlador) >= 0){
+                    controlador = '';
+                    console.warn('Error, las variables deben empezar por una letra.');
+                }
                 return {type: 'numero', value: token};
             }
 
         });
 }
+// Objeto de Objetos de varibales.
+var variables = {};

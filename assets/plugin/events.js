@@ -1,4 +1,5 @@
 data.addEventListener('blur', function(e){
+  consola.innerHTML = '';
   const line = data.innerHTML;
   //console.log(line);
 
@@ -8,17 +9,30 @@ data.addEventListener('blur', function(e){
   const datos = nojump.split('<div>');
   highlights(datos);
 
+  // Removemos todo los elementos no deseados de la sintaxis del programa.
   const lexico = datos.map(i => {
     // Eliminar los ';'
-    const item = i.replace(regexEx, '');
-    const nospan = item.replace(regexSpan, '');
-    const nospan2 = nospan.replace(regexSpan2, '');
+    const item = i.replace(regexEx, '\n ');
+    const nospan = item.replace(regexSpan, '\n');
+    const nospan2 = nospan.replace(regexSpan2, '\n');
 
-    return nospan2
+    // Eliminar los '&nbsp'
+    const nondbsp = nospan2.replace(nospace, '');
+
+    // Separar los OR y EL
+    const serpararAs = nondbsp.replace(asignador, ' = ');
+
+    const optimoAbrir = serpararAs.replace(apertura, ' ( ');
+    const optimoCerra = optimoAbrir.replace(cierre, ' ) ');
+
+    return optimoCerra;
   }).join(' ');
+
+  // Llamos la función para realizar el análisis léxico.
+  console.log(evalLexico(lexico));
 
   // controlador  = evalLexico(lexico);
   // console.log(controlador);
-  //console.log(evalLexico(lexico));
-  console.log(evalSintactico(lexico));
+  // evalSintactico(lexico);
+  // console.log(evalSintactico(lexico));
 })
