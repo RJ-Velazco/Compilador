@@ -1,14 +1,138 @@
-function includes(label, arr, v){
-  for (var i = 0; i < arr.length; i++) {
-    if(label.includes(arr[i])){
-      return (v ? arr[i] : true);
+function stringify(tokens){
+  const arr = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
+
+    if(token.type === "texto"){
+      if(tokens[i].value.includes("'") && tokens[i].value.lastIndexOf("'") === tokens[i].value.indexOf("'")){
+        token.value = token.value.replace("'", '')
+
+        let alt = 1;
+        while(tokens[i+alt]){
+          if(tokens[i+alt].value.includes("'")){
+            token.value = token.value.concat(' ', tokens[i+alt].value.replace("'", ''))
+            alt++;
+          } else {
+            break;
+          }
+        }
+
+        i = i + alt-1;
+      } else {
+        token.value = token.value.replace("'", '')
+        token.value = token.value.replace("'", '')
+      }
+
+      if(token.value.includes("'"))
+        throw new Error('El string no está correctamente formado.');
+    }
+    arr.push(token);
+  }
+
+  return arr;
+}
+
+function evalSintactico(tokens) {
+  const _Tokens = stringify(tokens);
+  const _Vars = [];
+
+  for (var i = 0; i < _Tokens.length; i++) {
+    const token = _Tokens[i];
+    console.log(tokens)
+
+    if(i > 0){
+
+      /* Si el token es una variable */
+      if(token.type === 'VR'){
+        if(_Vars[token.value]){
+          console.log({
+            action: 'Llamada',
+            ...token
+          })
+        } else {
+          if(_Tokens[i-1].type !== 'TP'){
+            throw new Error('El identificador ('+token.value+') no ha sido establecido.')
+          } else {
+            _Vars[token.value] = token;
+            console.log({
+              action: 'Establecimiento',
+              ...token
+            })
+          }
+        }
+      }
+
+      if(token.type === 'PR'){
+        console.log({
+          action: 'Instrucción',
+          ...token
+        })
+      }
+
+      if(token.type === 'OR'){
+        if(token.value === '='){
+          if(_Tokens[i-1].type === 'VR'){
+            console.log({
+              action: 'Asignación',
+              ...token
+            })
+          } else {
+            throw new Error('Imposible asignar una constante sin identificador')
+          }
+        } else {
+          console.log({
+            action: 'Conjución',
+            ...token
+          })
+        }
+      }
+
+      if(token.type==='OA'){
+        if(_Tokens[i+1]){
+          console.log({
+            action: 'Operación',
+            ...token
+          })
+        } else {
+          throw new Error('Imposible operar sobre un identificador que no existe');
+        }
+      }
+
+      if(token.type === 'numero'){
+        if(_Tokens[i-1].type === 'OR' || _Tokens[i-1].type === 'PR' || _Tokens[i-1].type === 'OA'){
+          console.log({
+            action: 'Constante',
+            ...token
+          })
+        } else {
+          throw new Error('El número ('+token.value+') no forma parte de una operación definida.')
+        }
+      }
+
+    } else {
+      if(token.type === "numero" || token.type === "texto"){
+        throw new Error('Identificador no establecido ('+token.value+')');
+      } else {
+
+        if(token.type==='TP'){
+          console.log({
+            action: 'Declaración',
+            ...token
+          })
+        } else if (token.type==='PR'){
+          console.log({
+            action: 'Instrucción',
+            ...token
+          })
+        } else {
+          throw new Error('No se reconoce la instrucción ('+token.value+').')
+        }
+      }
     }
   }
 
-  return false;
-}
-
-function evalSintactico(code) {
+  /*
   const lines = code.split(';')
 
   for (let i = 0; i < lines.length; i++) {
@@ -87,5 +211,6 @@ function evalSintactico(code) {
       }
     }
   }
+  */
 
 }

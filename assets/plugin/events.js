@@ -29,10 +29,5 @@ data.addEventListener('blur', function(e){
   }).join(' ');
 
   // Llamos la función para realizar el análisis léxico.
-  console.log(evalLexico(lexico));
-
-  // controlador  = evalLexico(lexico);
-  // console.log(controlador);
-  // evalSintactico(lexico);
-  // console.log(evalSintactico(lexico));
+  evalSintactico(evalLexico(lexico));
 })

@@ -25,7 +25,7 @@ function evalLexico(code) {
             } else if(token == 'false'){
                 return {type: 'boolean', value: false};
             } else if(isNaN(token)){
-                
+
                 if(TP.indexOf(controlador) >= 0 || variables[token]){
                     controlador = '';
 
@@ -40,7 +40,7 @@ function evalLexico(code) {
                             variable: token,
                             codigo: 1
                         }
-                    }   
+                    }
                     //   variables[].
                   return {type: 'VR', value: token}
                 }
