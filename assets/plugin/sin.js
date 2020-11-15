@@ -39,7 +39,7 @@ function evalSintactico(tokens) {
 
   for (var i = 0; i < _Tokens.length; i++) {
     const token = _Tokens[i];
-    console.log(tokens)
+    //console.log(token)
 
     if(i > 0){
 
@@ -63,6 +63,7 @@ function evalSintactico(tokens) {
         }
       }
 
+      /* El token es una palabra reservada */
       if(token.type === 'PR'){
         console.log({
           action: 'Instrucción',
@@ -70,16 +71,26 @@ function evalSintactico(tokens) {
         })
       }
 
+
+      /* El token es una expresión relacional */
       if(token.type === 'OR'){
+
+        /* El token está asignando una variable */
         if(token.value === '='){
+
+          /* El token anterior es una variable */
           if(_Tokens[i-1].type === 'VR'){
             console.log({
               action: 'Asignación',
               ...token
             })
+
+            /* El token anterior no es una variable */
           } else {
             throw new Error('Imposible asignar una constante sin identificador')
           }
+
+          /* El token es una operación relacional */
         } else {
           console.log({
             action: 'Conjución',
@@ -88,7 +99,10 @@ function evalSintactico(tokens) {
         }
       }
 
+      /* El token es una expresión aritmética */
       if(token.type==='OA'){
+
+        /* Hay un token después de la expresión */
         if(_Tokens[i+1]){
           console.log({
             action: 'Operación',
@@ -99,8 +113,29 @@ function evalSintactico(tokens) {
         }
       }
 
+      if(token.type === "texto"){
+        if(_Tokens[i-1].type === 'TP'){
+          console.log({
+            action: 'Asignación',
+            ...token
+          })
+        } else if(_Tokens[i-1].type === 'PR'){
+          console.log({
+            action: 'Constante',
+            ...token
+          })
+        } else {
+          throw new Error('El número ('+token.value+') no forma parte de una operación definida.')
+        }
+      }
+
       if(token.type === 'numero'){
-        if(_Tokens[i-1].type === 'OR' || _Tokens[i-1].type === 'PR' || _Tokens[i-1].type === 'OA'){
+        if(_Tokens[i-1].type === 'TP'){
+          console.log({
+            action: 'Asignación',
+            ...token
+          })
+        } else if(_Tokens[i-1].type === 'OR' || _Tokens[i-1].type === 'PR' || _Tokens[i-1].type === 'OA'){
           console.log({
             action: 'Constante',
             ...token
@@ -111,10 +146,13 @@ function evalSintactico(tokens) {
       }
 
     } else {
+      /* El primer token no puede ser un texto / número / OA / OR / OL / EL */
+
       if(token.type === "numero" || token.type === "texto"){
         throw new Error('Identificador no establecido ('+token.value+')');
       } else {
 
+        /* El token #1 solo puede ser una Declaración o Instrucción */
         if(token.type==='TP'){
           console.log({
             action: 'Declaración',
@@ -128,6 +166,7 @@ function evalSintactico(tokens) {
         } else {
           throw new Error('No se reconoce la instrucción ('+token.value+').')
         }
+
       }
     }
   }

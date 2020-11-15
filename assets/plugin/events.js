@@ -1,7 +1,8 @@
 data.addEventListener('blur', function(e){
-  consola.innerHTML = '';
+  consola.innerHTML = '>';
   const line = data.innerHTML;
   //console.log(line);
+  console.clear();
 
   // Eliminar todas las entidades html.
   const noempty = line.replace(regexDiv, '')
@@ -29,5 +30,9 @@ data.addEventListener('blur', function(e){
   }).join(' ');
 
   // Llamos la función para realizar el análisis léxico.
-  evalSintactico(evalLexico(lexico));
+  try {
+    evalSintactico(evalLexico(lexico));
+  } catch (e) {
+    consola.innerHTML = ('> Error: '+e.message);
+  }
 })

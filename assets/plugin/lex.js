@@ -30,8 +30,7 @@ function evalLexico(code) {
                     controlador = '';
 
                     if(token.match(regexVariables) === null){
-                        consola.innerHTML = `> Error, la variable ${token} esta mal definida. Las variables deben empezar por una letra.`;
-                        console.warn('Error, las variables deben empezar por una letra.');
+                        throw new Error(`La variable ${token} esta mal definida. Las variables deben empezar por una letra.`)
                     }
 
                     // Instanciamos las variables del Programa.
@@ -48,7 +47,7 @@ function evalLexico(code) {
             } else {
                 if( TP.indexOf(controlador) >= 0){
                     controlador = '';
-                    console.warn('Error, las variables deben empezar por una letra.');
+                    throw new Error(`Las variables deben empezar por una letra.`)
                 }
                 return {type: 'numero', value: token};
             }
