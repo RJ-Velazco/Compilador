@@ -15,16 +15,20 @@ const apertura = new RegExp('[(]', 'g');
 const cierre = new RegExp('[)]', 'g');
 
 // Expresion Regular para las variables
-const regexVariables = new RegExp(/^[a-zA-Z]([a-zA-Z0-9]+)?$/, 'g') 
+const regexVariables = new RegExp(/^[a-zA-Z]([a-zA-Z0-9]+)?$/, 'g')
 
 // Palabras Reservadas del Compilador.
-var PR = ['print', 'dump', 'if', 'else', 'function', 'return'];  // -- Palabras Reservadas.
-var TP = ['var', 'string', 'number', 'bool', 'null']  // -- Tipo de Datos.
-var OA = ['+', '-', '*', '/'];  // -- Operadores Aritmeticos.
-var OR = ['&gt', '=', '&lt', '!'];  // -- Operadores Relaciones.
-var OL = ['AND', 'OR', '&&', '||']  // -- Operadores  Logicos.
+var PR = ['print', 'dump', 'if', 'else', 'function', 'return']; // -- Palabras Reservadas.
+var TP = ['var', 'string', 'number', 'bool', 'null'] // -- Tipo de Datos.
+var OA = ['+', '-', '*', '/']; // -- Operadores Aritmeticos.
+var OR = ['&gt', '=', '&lt', '!']; // -- Operadores Relaciones.
+var OL = ['AND', 'OR', '&&', '||'] // -- Operadores  Logicos.
 var EL = ['{', '}', '[', ']', '(', ')', ';', ','] // -- Elementos del Sistema.
-var DT = ['texto', 'numero', 'boolean'];  // -- DataType.
+var DT = ['texto', 'numero', 'boolean']; // -- DataType.
 
-
+// Objeto de Objetos de varibales.
+var variables = {};
 var controlador;
+var texto = "";
+var noTextAnlz = true;
+var init = false;
