@@ -31,7 +31,7 @@ data.addEventListener('blur', function(e) {
 
     // Llamos la función para realizar el análisis léxico.
     try {
-        var lexResult = evalLexico(lexico).filter((token) => {
+        const lexResult = evalLexico(lexico).filter((token) => {
             if (token) return token;
         });
         console.log(lexResult);

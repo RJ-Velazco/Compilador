@@ -34,7 +34,7 @@ function stringify(tokens){
 }
 
 function evalSintactico(tokens) {
-  const _Tokens = stringify(tokens);
+  const _Tokens = tokens;
   const _Vars = [];
 
   for (var i = 0; i < _Tokens.length; i++) {
@@ -113,19 +113,51 @@ function evalSintactico(tokens) {
         }
       }
 
+      if(token.value === '('){
+        /* Hay un token después de la expresión */
+        const nexToken = _Tokens[i+1];
+        if(nexToken){
+          if(nexToken.type !== 'texto' && nexToken.type !== 'numero'){
+            throw new Error('No es posible encapsular un identificador ('+nexToken.value+') que no sea un valor textual o numérico.')
+          } else {
+            console.log({
+              action: 'Encapsulación',
+              ...token
+            })
+          }
+        } else {
+          throw new Error('No hay un elemento para abrir y encapsular.');
+        }
+      }
+      if(token.value === ')'){
+        /* Hay un token antes de la expresión */
+        const lastToken = _Tokens[i-1]
+
+        if(lastToken.type !== 'texto' && lastToken.type !== 'numero'){
+          throw new Error('No es posible encapsular un identificador ('+lastToken.value+') que no sea un valor textual o numérico.')
+        } else {
+          console.log({
+            action: 'Encapsulación',
+            ...token
+          })
+        }
+      }
+
       if(token.type === "texto"){
-        if(_Tokens[i-1].type === 'TP'){
+        const lastToken = _Tokens[i-1];
+        const nextToken = _Tokens[i+1];
+        if(lastToken.type === 'TP'){
           console.log({
             action: 'Asignación',
             ...token
           })
-        } else if(_Tokens[i-1].type === 'PR'){
+        } else if(lastToken.type === 'PR' || lastToken.value === '(' || nextToken ? nextToken.value === ')' : false){
           console.log({
             action: 'Constante',
             ...token
           })
         } else {
-          throw new Error('El número ('+token.value+') no forma parte de una operación definida.')
+          throw new Error('El texto ('+token.value+') no forma parte de una operación definida.')
         }
       }
 
