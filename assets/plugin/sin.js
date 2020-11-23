@@ -145,29 +145,32 @@ function evalSintactico(tokens) {
 
       if(token.type === "texto"){
         const lastToken = _Tokens[i-1];
+        const nextToken = _Tokens[i+1] || {};
+
+        if(lastToken.value === '='){
+          console.log({
+            action: 'Asignación',
+            ...token
+          })
+        } else if(lastToken.type === 'PR' || (lastToken.value === '(' && nextToken.value === ')')){
+          console.log({
+            action: 'Constante',
+            ...token
+          })
+        } else {
+          throw new Error('El texto "'+token.value+'" no forma parte de una operación definida.')
+        }
+      }
+
+      if(token.type === 'numero'){
+        const lastToken = _Tokens[i-1];
         const nextToken = _Tokens[i+1];
         if(lastToken.type === 'TP'){
           console.log({
             action: 'Asignación',
             ...token
           })
-        } else if(lastToken.type === 'PR' || lastToken.value === '(' || nextToken ? nextToken.value === ')' : false){
-          console.log({
-            action: 'Constante',
-            ...token
-          })
-        } else {
-          throw new Error('El texto ('+token.value+') no forma parte de una operación definida.')
-        }
-      }
-
-      if(token.type === 'numero'){
-        if(_Tokens[i-1].type === 'TP'){
-          console.log({
-            action: 'Asignación',
-            ...token
-          })
-        } else if(_Tokens[i-1].type === 'OR' || _Tokens[i-1].type === 'PR' || _Tokens[i-1].type === 'OA'){
+        } else if(lastToken.type === 'OR' || lastToken.type === 'PR' || lastToken.type === 'OA' || lastToken.value === '(' || nextToken.value === ")"){
           console.log({
             action: 'Constante',
             ...token

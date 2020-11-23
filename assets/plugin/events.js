@@ -37,6 +37,7 @@ data.addEventListener('blur', function(e) {
         console.log(lexResult);
         evalSintactico(lexResult);
     } catch (e) {
+      console.log(e);
         consola.innerHTML = ('> Error: ' + e.message);
     }
 })
