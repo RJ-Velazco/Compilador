@@ -32,10 +32,13 @@ data.addEventListener('blur', function(e) {
     // Llamos la función para realizar el análisis léxico.
     try {
         const lexResult = evalLexico(lexico).filter((token) => {
-            if (token) return token;
+            if(token) return token;
         });
         console.log(lexResult);
-        evalSintactico(lexResult);
+        const sinResult = evalSintactico(lexResult);
+        console.log(sinResult)
+        consola.innerHTML = ('> ')
+        evalSemantico(sinResult)
     } catch (e) {
       console.log(e);
         consola.innerHTML = ('> Error: ' + e.message);

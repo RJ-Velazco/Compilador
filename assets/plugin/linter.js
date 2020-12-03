@@ -1,4 +1,8 @@
-const privateStrings = [ 'string', 'number', 'var', 'print', 'for', 'while', 'equal', 'if', 'else', 'then'];
+const privateStrings = [
+  'string', 'number', 'var',
+  'println', '!',
+  'print', 'dump', '='
+];
 
 function highlights(text){
   // Aplicar colores a las palabras reservadas

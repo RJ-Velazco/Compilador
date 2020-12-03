@@ -18,7 +18,7 @@ const cierre = new RegExp('[)]', 'g');
 const regexVariables = new RegExp(/^[a-zA-Z]([a-zA-Z0-9]+)?$/, 'g')
 
 // Palabras Reservadas del Compilador.
-var PR = ['print', 'dump', 'if', 'else', 'function', 'return']; // -- Palabras Reservadas.
+var PR = ['print', 'dump', 'println']; // -- Palabras Reservadas.
 var TP = ['var', 'string', 'number', 'bool', 'null'] // -- Tipo de Datos.
 var OA = ['+', '-', '*', '/']; // -- Operadores Aritmeticos.
 var OR = ['&gt', '=', '&lt', '!']; // -- Operadores Relaciones.
