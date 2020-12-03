@@ -121,6 +121,11 @@ function evalSintactico(tokens) {
             action: 'Constante',
             ...token
           })
+        } else if(lastToken.value === '+' || nextToken.value === '+'){
+          console.log({
+            action: 'Constante',
+            ...token
+          })
         } else {
           throw new Error('El texto "'+token.value+'" no forma parte de una operación definida.')
         }
